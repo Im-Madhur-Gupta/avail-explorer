@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { StoreProvider } from "@/modules/common/providers/StoreProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -9,7 +10,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "AvailX",
-  description: "Avail Explorer",
+  description: "A simple explorer for Avail",
 };
 
 export default function RootLayout({
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} antialiased`}>{children}</body>
+      <body className={`${poppins.className} antialiased`}>
+        <StoreProvider>{children}</StoreProvider>
+      </body>
     </html>
   );
 }
