@@ -1,7 +1,5 @@
+import ActionsPage from "@/modules/actions/pages/ActionsPage";
+
 export default function Home() {
-  return (
-    <main>
-      <h1>AvailX</h1>
-    </main>
-  );
+  return <ActionsPage />;
 }
