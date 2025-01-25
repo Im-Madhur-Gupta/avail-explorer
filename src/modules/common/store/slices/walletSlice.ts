@@ -21,6 +21,7 @@ export const initialWalletState: WalletState = {
   status: WalletStatus.DISCONNECTED,
   account: null,
   initializedExtensions: new Set(),
+  balance: null,
 };
 
 export const createWalletSlice = (set: SetState, get: GetState) => ({
@@ -82,6 +83,9 @@ export const createWalletSlice = (set: SetState, get: GetState) => ({
             }
           : {}),
       }));
+
+      // Update balance after successful connection
+      await get().updateBalance();
     } catch (error) {
       console.error("Failed to connect wallet", error);
       set({
@@ -169,6 +173,24 @@ export const createWalletSlice = (set: SetState, get: GetState) => ({
     } catch (error) {
       console.error("Failed to disconnect wallet", error);
       set({ status: WalletStatus.DISCONNECTED });
+    }
+  },
+
+  updateBalance: async (): Promise<void> => {
+    try {
+      const { availApi, account } = get();
+
+      if (!availApi || !account) {
+        set({ balance: null });
+        return;
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result: any = await availApi.query.system.account(account.address);
+      set({ balance: result["data"]["free"].toBigInt() });
+    } catch (error) {
+      console.error("Failed to update balance", error);
+      set({ balance: null });
     }
   },
 });

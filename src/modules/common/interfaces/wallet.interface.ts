@@ -19,10 +19,15 @@ export interface WalletState {
   status: WalletStatus;
   account: WalletAccount | null;
   initializedExtensions: Set<string>;
+  balance: bigint | null;
 }
 
 export interface WalletActions {
   connect: () => Promise<void>;
-  initializeExtension: (source: string, availApi: ApiPromise) => Promise<boolean>;
+  initializeExtension: (
+    source: string,
+    availApi: ApiPromise
+  ) => Promise<boolean>;
   disconnect: () => Promise<void>;
+  updateBalance: () => Promise<void>;
 }

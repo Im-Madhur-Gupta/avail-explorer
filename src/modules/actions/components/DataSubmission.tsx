@@ -10,11 +10,21 @@ import {
   FormLabel,
   FormMessage,
 } from "@/modules/common/components/ui/form";
-import TransactionReceipt from "./TransactionReceipt";
+import TransactionReceiptModal from "./TransactionReceiptModal";
 
 const DataSubmission = () => {
-  const { form, handleSubmit, isSubmitting, isValid, txReceipt } =
-    useDataSubmission();
+  const {
+    form,
+    isSubmitting,
+    isValid,
+    txReceipt,
+    handleSubmit,
+    clearTxReceipt,
+  } = useDataSubmission();
+
+  const handleReceiptModalClose = () => {
+    clearTxReceipt();
+  };
 
   return (
     <Form {...form}>
@@ -56,8 +66,6 @@ const DataSubmission = () => {
           )}
         />
 
-        {txReceipt && <TransactionReceipt txReceipt={txReceipt} />}
-
         <div className="rounded-lg border bg-muted/50 p-4">
           <div className="text-sm font-medium">Estimated Fees</div>
           <div className="mt-1 text-2xl font-bold">0.0 AVAIL</div>
@@ -74,6 +82,11 @@ const DataSubmission = () => {
           {isSubmitting ? "Submitting..." : "Submit Data"}
         </Button>
       </div>
+
+      <TransactionReceiptModal
+        txReceipt={txReceipt}
+        onClose={handleReceiptModalClose}
+      />
     </Form>
   );
 };
