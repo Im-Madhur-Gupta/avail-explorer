@@ -1,7 +1,7 @@
-import type { StoreApi } from "zustand";
 import { ApiPromise, initialize, signedExtensions, types } from "avail-js-sdk";
 import { isNumber } from "@polkadot/util";
 import type { MetadataDef } from "@polkadot/extension-inject/types";
+import type { StoreApi } from "zustand";
 
 import {
   WalletState,
@@ -9,15 +9,16 @@ import {
   InjectedWeb3Entry,
 } from "@/modules/common/interfaces/wallet.interface";
 import { WalletStatus } from "@/modules/common/enums/wallet-status.enum";
+import { StoreState } from "../createStore";
+import { initialChainInteractionState } from "@/modules/actions/store/slices/chainInteractionSlice";
 
 export interface WalletSlice extends WalletState, WalletActions {}
 
-type SetState = StoreApi<WalletSlice>["setState"];
-type GetState = StoreApi<WalletSlice>["getState"];
+type SetState = StoreApi<StoreState>["setState"];
+type GetState = StoreApi<StoreState>["getState"];
 
 export const initialWalletState: WalletState = {
   status: WalletStatus.DISCONNECTED,
-  availApi: undefined,
   account: null,
   initializedExtensions: new Set(),
 };
@@ -100,15 +101,22 @@ export const createWalletSlice = (set: SetState, get: GetState) => ({
     availApi: ApiPromise
   ): Promise<boolean> => {
     try {
-      const initializedExtensions = get().initializedExtensions;
+      const { web3FromSource } = await import("@polkadot/extension-dapp");
+      const injector = await web3FromSource(extension);
 
-      // Skip if already initialized
+      const signer = injector.signer;
+
+      // Update chain interaction state
+      set({
+        availApi,
+        signer,
+      });
+
+      const initializedExtensions = get().initializedExtensions;
+      // Skip if extension is already initialized
       if (initializedExtensions.has(extension)) {
         return false;
       }
-
-      const { web3FromSource } = await import("@polkadot/extension-dapp");
-      const injector = await web3FromSource(extension);
 
       if (!injector.metadata) {
         throw new Error("No metadata found");
@@ -154,7 +162,10 @@ export const createWalletSlice = (set: SetState, get: GetState) => ({
         await availApi.disconnect();
       }
 
-      set({ ...initialWalletState });
+      set({
+        ...initialWalletState,
+        ...initialChainInteractionState,
+      });
     } catch (error) {
       console.error("Failed to disconnect wallet", error);
       set({ status: WalletStatus.DISCONNECTED });

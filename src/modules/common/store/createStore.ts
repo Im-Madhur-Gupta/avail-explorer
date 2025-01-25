@@ -1,16 +1,22 @@
 import { createStore as createZustandStore } from "zustand/vanilla";
 import { persist, createJSONStorage } from "zustand/middleware";
 import {
-  WalletSlice,
   createWalletSlice,
   initialWalletState,
+  type WalletSlice,
 } from "./slices/walletSlice";
+import {
+  createChainInteractionSlice,
+  initialChainInteractionState,
+  type ChainInteractionSlice,
+} from "@/modules/actions/store/slices/chainInteractionSlice";
 
 // Combine all slices here
-export type StoreState = WalletSlice;
+export type StoreState = WalletSlice & ChainInteractionSlice;
 
 export const defaultInitState: Partial<StoreState> = {
   ...initialWalletState,
+  ...initialChainInteractionState,
 };
 
 export const createStore = (
@@ -21,6 +27,7 @@ export const createStore = (
       (set, get) => ({
         ...initState,
         ...createWalletSlice(set, get),
+        ...createChainInteractionSlice(set, get),
       }),
       {
         name: "avail-x-store",

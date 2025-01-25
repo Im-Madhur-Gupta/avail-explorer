@@ -17,7 +17,6 @@ export interface InjectedWeb3Entry {
 
 export interface WalletState {
   status: WalletStatus;
-  availApi: ApiPromise | undefined;
   account: WalletAccount | null;
   initializedExtensions: Set<string>;
 }
