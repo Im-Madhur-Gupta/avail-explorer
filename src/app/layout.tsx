@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { StoreProvider } from "@/modules/common/providers/StoreProvider";
+import { QueryProvider } from "@/modules/common/providers/QueryProvider";
 import { Header } from "@/modules/common/components/Header";
 import { Toaster } from "@/modules/common/components/ui/toaster";
 
@@ -23,13 +24,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
-        <StoreProvider>
-          <Header />
-          <main className="container mx-auto py-6 space-y-8">
-            {children}
-          </main>
-          <Toaster />
-        </StoreProvider>
+        <QueryProvider>
+          <StoreProvider>
+            <Header />
+            <main className="container mx-auto py-6 space-y-8">{children}</main>
+            <Toaster />
+          </StoreProvider>
+        </QueryProvider>
       </body>
     </html>
   );
