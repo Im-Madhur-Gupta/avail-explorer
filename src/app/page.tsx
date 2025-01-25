@@ -1,5 +1,5 @@
-import ActionsPage from "@/modules/actions/pages/ActionsPage";
+import PerformActionsPage from "@/modules/actions/pages/PerformActionsPage";
 
 export default function Home() {
-  return <ActionsPage />;
+  return <PerformActionsPage />;
 }

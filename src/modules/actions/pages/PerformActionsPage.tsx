@@ -15,9 +15,8 @@ import {
 } from "@/modules/common/components/ui/tabs";
 import DataSubmission from "../components/DataSubmission";
 import BalanceTransfer from "../components/BalanceTransfer";
-import UserActions from "../components/UserActions";
 
-const ActionsPage = () => {
+const PerformActionsPage = () => {
   return (
     <div className="mx-auto space-y-8 max-w-screen-md">
       <div>
@@ -61,20 +60,8 @@ const ActionsPage = () => {
           </Card>
         </TabsContent>
       </Tabs>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Actions</CardTitle>
-          <CardDescription>
-            Your recent transactions and data submissions
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <UserActions />
-        </CardContent>
-      </Card>
     </div>
   );
 };
 
-export default ActionsPage;
+export default PerformActionsPage;
