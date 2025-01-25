@@ -9,6 +9,7 @@ query GetLatestTransactions($first: Int!, $after: Cursor, $signer: String!) {
     orderBy: TIMESTAMP_DESC
     filter: {
       signer: { equalTo: $signer }
+      module: { in: ["dataAvailability", "balances"] }
     }
   ) {
     edges {
