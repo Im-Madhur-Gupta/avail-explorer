@@ -61,7 +61,15 @@ export const createWalletSlice = (set: SetState, get: GetState) => ({
       }
 
       const account = accounts[0];
-      const availApi = await initialize("wss://turing-rpc.avail.so/ws");
+
+
+      const rpcUrl = process.env.NEXT_PUBLIC_AVAIL_RPC_WS_URL;
+
+      if (!rpcUrl) {
+        throw new Error("No WebSocket RPC URL found");
+      }
+
+      const availApi = await initialize(rpcUrl);
 
       // Check if the network is available
       await availApi.isReadyOrError;

@@ -111,8 +111,6 @@ export const createActionTrackingSlice = (set: SetState, get: GetState) => ({
    */
   trackAction: (hash: string, type: ActionType) => {
     try {
-      console.log("trackAction", hash, type);
-
       set((state) => ({
         ...state,
         trackedActions: {
