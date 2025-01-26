@@ -1,13 +1,13 @@
 # Avail Explorer
 
-Avail Explorer enables users to interact with the Avail blockchain. Users can view on-chain actions (`extrinsics`), submit data, and perform balance transfers with ease.
+Avail Explorer allows users to interact seamlessly with the Avail Network. Users can view on-chain actions (`extrinsics`), submit data, and perform balance transfers with ease.
 
-You can access the live version of Avail Explorer at the following link: [https://availexplorer.vercel.app/](https://availexplorer.vercel.app/).
+Live version of the app can be accessed here: [https://availexplorer.vercel.app/](https://availexplorer.vercel.app/).
 
 ## Features
 
-- **Wallet Integration**:
-  - Supports Polkadot wallet connection with status checks and transaction handling.
+- **Wallet Connection**:
+  - Supports Polkadot wallet with status checks and automatic reconnection if the wallet is already connected.
 - **Perform Actions**:
   - Allows users to perform actions like balance transfers and data submissions.
   - Includes form validation, fee estimation, transaction status updates.
@@ -15,19 +15,20 @@ You can access the live version of Avail Explorer at the following link: [https:
   - Leverages a WebSocket connection to the Avail RPC for live updates.
 - **Action History Page**:
   - Displays a user’s past actions with infinite scroll for smooth navigation.
-- **Action Data Lookup**:
-  - Fetches action details using a transaction hash
-  - Decoded call parameters and values are displayed on the page alongside relevant data of the transaction.
+- **Action Data Lookup Page**:
+  - Fetches details of an action using a transaction hash.
+  - Lists out call parameters with their decoded values, presented alongside relevant action data.
 - **Optimized Fetch Queries**:
-  - Implemented optimized data fetching by using appropriate values for `gcTime`, `staleTime`, and `refetchInterval` in queries 
+  - Optimized data fetching by using appropriate values for `gcTime`, `staleTime`, and `refetchInterval` in queries.
 
 ## Tech Stack
 
-- **Frontend Framework**: `Next.js with TypeScript`
+- **Framework**: `Next.js with TypeScript`
 - **Styling**: `TailwindCSS`
 - **Components**: `Shadcn`
 - **State Management**: `Zustand`
 - **API Calls**: `React Query`, `graphql-request`
+- **Blockchain**: `avail-js-sdk`, `@polkadot/api`, `@polkadot/extension-dapp`
 
 ## Getting Started
 
@@ -48,10 +49,10 @@ The application requires specific environment variables. Use the `.env.example` 
 #### Required Environment Variables:
 
 - `NEXT_PUBLIC_AVAIL_INDEXER_URL`:
-  - URL of the Avail's GraphQL Indexer API.
+  - Avail's GraphQL-based Indexer API Endpoint
   - For development environment use: `https://turing-indexer.avail.so/`
 - `NEXT_PUBLIC_AVAIL_RPC_WS_URL`:
-  - URL of the Avail's RPC WebSocket.
+  - Avail's RPC WebSocket Endpoint
   - For development environment use: `wss://turing-rpc.avail.so/ws`
 
 ### 3. Run the Application
