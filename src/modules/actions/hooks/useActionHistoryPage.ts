@@ -2,18 +2,14 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
 import { useAppStore } from "@/modules/common/providers/StoreProvider";
-import { useExtrinsics } from "./useExtrinsics";
-import { WalletStatus } from "@/modules/common/enums/wallet-status.enum";
+import { useWalletStatus } from "@/modules/common/hooks/useWalletStatus";
+import { useExtrinsics } from "@/modules/actions/hooks/useExtrinsics";
 
 export const useActionHistoryPage = () => {
-  const account = useAppStore((state) => state.account);
-  const status = useAppStore((state) => state.status);
-
   const { ref, inView } = useInView();
 
-  const isConnected = status === WalletStatus.CONNECTED;
-  const isConnecting = status === WalletStatus.CONNECTING;
-
+  const account = useAppStore((state) => state.account);
+  const { isConnected, isConnecting } = useWalletStatus();
   const {
     data,
     isLoading: isExtrinsicsLoading,
@@ -24,7 +20,7 @@ export const useActionHistoryPage = () => {
     refetch,
   } = useExtrinsics({
     signer: account?.address ?? "",
-    enabled: isConnected,
+    enabled: isConnected, // Enabled only when wallet is connected
   });
 
   useEffect(() => {
