@@ -45,19 +45,31 @@ export const useBalanceTransfer = () => {
       isValid: boolean;
       errorMessage?: string;
     } => {
-      if (!balance || !estimatedFee || !availApi) {
+      if (!availApi || !balance) {
         return { isValid: true };
       }
 
       const decimals = getDecimals(availApi);
       const parsedAmount = formatNumberToBalance(Number(amount), decimals);
       const amountInBigInt = BigInt(parsedAmount.toString());
-      const totalRequired = amountInBigInt + estimatedFee;
 
+      // Check if the amount exceeds the balance when the fee is not yet estimated
+      if (amountInBigInt >= balance) {
+        return {
+          isValid: false,
+          errorMessage: "Not enough balance to cover the transfer and fees",
+        };
+      }
+
+      if (!estimatedFee) {
+        return { isValid: true };
+      }
+
+      const totalRequired = amountInBigInt + estimatedFee;
       if (totalRequired > balance) {
         return {
           isValid: false,
-          errorMessage: "Insufficient balance for transfer + fees",
+          errorMessage: "Not enough balance to cover the transfer and fees",
         };
       }
 
@@ -68,8 +80,8 @@ export const useBalanceTransfer = () => {
         return {
           isValid: false,
           errorMessage: isKeepAlive
-            ? "Transfer would leave balance below existential deposit"
-            : "Insufficient balance",
+            ? "Transfer will reduce your balance below the existential deposit"
+            : "Not enough balance to cover the transfer and fees",
         };
       }
 
