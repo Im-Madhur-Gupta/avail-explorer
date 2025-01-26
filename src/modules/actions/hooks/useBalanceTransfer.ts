@@ -13,7 +13,7 @@ import { isValidSubstrateAddress } from "@/modules/actions/utils/address.utils";
 import { TransferType } from "@/modules/actions/enums/transfer-type.enum";
 import { EXISTENTIAL_BALANCE } from "@/modules/actions/constants/balance.constants";
 import { baseBalanceTransferSchema } from "@/modules/actions/schemas/balance-transfer.schema";
-import type { TransactionReceipt } from "@/modules/actions/interfaces/transaction-receipt.interface";
+import type { ActionReceipt } from "@/modules/actions/interfaces/action-receipt.interface";
 
 export const useBalanceTransfer = () => {
   const { toast } = useToast();
@@ -38,7 +38,9 @@ export const useBalanceTransfer = () => {
   const [isKeepAlive, setIsKeepAlive] = useState(true);
   const [estimatedFee, setEstimatedFee] = useState<bigint | null>(null);
   const [isEstimatingFee, setIsEstimatingFee] = useState(false);
-  const [txReceipt, setTxReceipt] = useState<TransactionReceipt | null>(null);
+  const [actionReceipt, setActionReceipt] = useState<ActionReceipt | null>(
+    null
+  );
 
   // Form validation
 
@@ -170,7 +172,7 @@ export const useBalanceTransfer = () => {
       const transferFn = isKeepAlive ? transferKeepAlive : transferAllowDeath;
       const result = await transferFn(values.recipient, values.amount);
 
-      setTxReceipt({
+      setActionReceipt({
         blockId: result.status.asFinalized.toString(),
         txHash: result.txHash.toString(),
       });
@@ -192,8 +194,8 @@ export const useBalanceTransfer = () => {
     }
   };
 
-  const clearTxReceipt = () => {
-    setTxReceipt(null);
+  const clearActionReceipt = () => {
+    setActionReceipt(null);
   };
 
   // Effects
@@ -231,8 +233,8 @@ export const useBalanceTransfer = () => {
     setIsKeepAlive,
     estimatedFee: formattedEstimatedFee,
     isEstimatingFee,
-    txReceipt,
+    actionReceipt,
     handleSubmit: form.handleSubmit(handleSubmit),
-    clearTxReceipt,
+    clearActionReceipt,
   };
 };

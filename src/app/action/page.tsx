@@ -1,7 +1,7 @@
 import ActionHistoryPage from "@/modules/actions/pages/ActionHistoryPage";
 
-const ActionsHistory = () => {
+const Actions = () => {
   return <ActionHistoryPage />;
 };
 
-export default ActionsHistory;
+export default Actions;

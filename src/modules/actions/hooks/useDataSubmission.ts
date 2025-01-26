@@ -26,10 +26,10 @@ export const useDataSubmission = () => {
   const {
     formattedEstimatedFee,
     isEstimatingFee,
-    txReceipt,
+    actionReceipt,
     estimateFeeHandler,
     performActionHandler,
-    clearTxReceipt,
+    clearActionReceipt,
     clearEstimatedFee,
   } = useActionHandler();
 
@@ -109,8 +109,8 @@ export const useDataSubmission = () => {
     estimatedFee: formattedEstimatedFee,
     isEstimatingFee,
     isBalanceSufficient,
-    txReceipt,
+    actionReceipt,
     handleSubmit: form.handleSubmit(handleSubmit),
-    clearTxReceipt,
+    clearActionReceipt,
   };
 };

@@ -3,7 +3,7 @@ import { useInView } from "react-intersection-observer";
 
 import { useAppStore } from "@/modules/common/providers/StoreProvider";
 import { useWalletStatus } from "@/modules/common/hooks/useWalletStatus";
-import { useExtrinsics } from "@/modules/actions/hooks/useExtrinsics";
+import { useUserActions } from "@/modules/actions/hooks/useUserActions";
 
 export const useActionHistoryPage = () => {
   const { ref, inView } = useInView();
@@ -12,13 +12,13 @@ export const useActionHistoryPage = () => {
   const { isConnected, isConnecting } = useWalletStatus();
   const {
     data,
-    isLoading: isExtrinsicsLoading,
+    isLoading: isActionsLoading,
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
     isError,
     refetch,
-  } = useExtrinsics({
+  } = useUserActions({
     signer: account?.address ?? "",
     enabled: isConnected, // Enabled only when wallet is connected
   });
@@ -33,7 +33,7 @@ export const useActionHistoryPage = () => {
     ref,
     data,
     isConnected,
-    isLoading: isConnecting || isExtrinsicsLoading,
+    isLoading: isConnecting || isActionsLoading,
     isError,
     hasNextPage,
     isFetchingNextPage,

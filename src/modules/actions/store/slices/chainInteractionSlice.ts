@@ -61,7 +61,7 @@ export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
           if (result.isError) {
             reject(result);
           }
-          // TODO: When transaction is part of a block, we can say 'Pending', but we need to wait for the block to be finalized. Can be handled when we add action tracking.
+          // TODO: When action is part of a block, we can say 'Pending', but we need to wait for the block to be finalized. Can be handled when we add action tracking.
           if (result.isFinalized) {
             resolve(result);
           }

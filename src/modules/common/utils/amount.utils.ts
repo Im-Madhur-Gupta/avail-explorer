@@ -6,7 +6,7 @@
  */
 export const formatAmount = (
   balance: bigint | string,
-  decimals: number
+  decimals: number = 18
 ): string => {
   const balanceBigInt = BigInt(balance.toString());
   const divisor = BigInt(10 ** decimals);

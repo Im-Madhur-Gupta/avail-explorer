@@ -11,7 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/modules/common/components/ui/form";
-import TransactionReceiptModal from "@/modules/actions/components/TransactionReceiptModal";
+import ActionReceiptModal from "@/modules/actions/components/ActionReceiptModal";
 import ActionFeeEstimate from "./ActionFeeEstimate";
 
 const BalanceTransfer = () => {
@@ -22,14 +22,14 @@ const BalanceTransfer = () => {
     isKeepAlive,
     estimatedFee,
     isEstimatingFee,
-    txReceipt,
+    actionReceipt,
     handleSubmit,
     setIsKeepAlive,
-    clearTxReceipt,
+    clearActionReceipt,
   } = useBalanceTransfer();
 
   const handleReceiptModalClose = () => {
-    clearTxReceipt();
+    clearActionReceipt();
   };
 
   return (
@@ -101,8 +101,8 @@ const BalanceTransfer = () => {
         </Button>
       </div>
 
-      <TransactionReceiptModal
-        txReceipt={txReceipt}
+      <ActionReceiptModal
+        actionReceipt={actionReceipt}
         onClose={handleReceiptModalClose}
       />
     </Form>

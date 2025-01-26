@@ -5,7 +5,7 @@ import type { ISubmittableResult } from "@polkadot/types/types";
 
 import { useAppStore } from "@/modules/common/providers/StoreProvider";
 import { formatAmount } from "@/modules/common/utils/amount.utils";
-import type { TransactionReceipt } from "@/modules/actions/interfaces/transaction-receipt.interface";
+import type { ActionReceipt } from "@/modules/actions/interfaces/action-receipt.interface";
 
 export const useActionHandler = () => {
   const { availApi } = useAppStore(
@@ -14,7 +14,9 @@ export const useActionHandler = () => {
     }))
   );
 
-  const [txReceipt, setTxReceipt] = useState<TransactionReceipt | null>(null);
+  const [actionReceipt, setActionReceipt] = useState<ActionReceipt | null>(
+    null
+  );
   const [estimatedFee, setEstimatedFee] = useState<bigint | null>(null);
   const [isEstimatingFee, setIsEstimatingFee] = useState(false);
 
@@ -41,7 +43,7 @@ export const useActionHandler = () => {
       const blockId = result.status.asFinalized.toString();
       const txHash = result.txHash.toString();
 
-      setTxReceipt({ blockId, txHash });
+      setActionReceipt({ blockId, txHash });
       setEstimatedFee(null);
     } catch (error) {
       console.error("Action failed", error);
@@ -53,8 +55,8 @@ export const useActionHandler = () => {
     setEstimatedFee(null);
   };
 
-  const clearTxReceipt = () => {
-    setTxReceipt(null);
+  const clearActionReceipt = () => {
+    setActionReceipt(null);
   };
 
   const getFormattedAmount = (amount: bigint | null) => {
@@ -71,13 +73,13 @@ export const useActionHandler = () => {
   const formattedEstimatedFee = getFormattedAmount(estimatedFee);
 
   return {
-    txReceipt,
+    actionReceipt,
     estimatedFee,
     formattedEstimatedFee,
     isEstimatingFee,
     estimateFeeHandler,
     performActionHandler,
     clearEstimatedFee,
-    clearTxReceipt,
+    clearActionReceipt,
   };
 };

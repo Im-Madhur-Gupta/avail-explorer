@@ -1,6 +1,5 @@
 export enum TransferType {
-  KeepAlive = "KeepAlive",
-  AllowDeath = "AllowDeath",
-  All = "All",
+  KeepAlive = "transferKeepAlive",
+  AllowDeath = "transferAllowDeath",
+  All = "transferAll",
 }
-

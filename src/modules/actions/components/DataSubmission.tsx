@@ -17,7 +17,7 @@ import {
   TooltipTrigger,
 } from "@/modules/common/components/ui/tooltip";
 import { HelpCircle } from "lucide-react";
-import TransactionReceiptModal from "./TransactionReceiptModal";
+import ActionReceiptModal from "./ActionReceiptModal";
 import ActionFeeEstimate from "./ActionFeeEstimate";
 
 const DataSubmission = () => {
@@ -28,13 +28,13 @@ const DataSubmission = () => {
     estimatedFee,
     isEstimatingFee,
     isBalanceSufficient,
-    txReceipt,
+    actionReceipt,
     handleSubmit,
-    clearTxReceipt,
+    clearActionReceipt,
   } = useDataSubmission();
 
   const handleReceiptModalClose = () => {
-    clearTxReceipt();
+    clearActionReceipt();
   };
 
   return (
@@ -112,8 +112,8 @@ const DataSubmission = () => {
         </Button>
       </div>
 
-      <TransactionReceiptModal
-        txReceipt={txReceipt}
+      <ActionReceiptModal
+        actionReceipt={actionReceipt}
         onClose={handleReceiptModalClose}
       />
     </Form>

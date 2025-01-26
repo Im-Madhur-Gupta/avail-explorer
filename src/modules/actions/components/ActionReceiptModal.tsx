@@ -9,18 +9,18 @@ import {
   getTxHashExplorerLink,
 } from "@/modules/common/utils/link.utils";
 import ExternalLink from "@/modules/common/components/ExternalLink";
-import type { TransactionReceipt } from "../interfaces/transaction-receipt.interface";
+import type { ActionReceipt } from "../interfaces/action-receipt.interface";
 
-interface TransactionReceiptModalProps {
-  txReceipt: TransactionReceipt | null;
+interface ActionReceiptModalProps {
+  actionReceipt: ActionReceipt | null;
   onClose: () => void;
 }
 
-const TransactionReceiptModal = ({
-  txReceipt,
+const ActionReceiptModal = ({
+  actionReceipt,
   onClose,
-}: TransactionReceiptModalProps) => {
-  if (!txReceipt) {
+}: ActionReceiptModalProps) => {
+  if (!actionReceipt) {
     return null;
   }
 
@@ -28,20 +28,20 @@ const TransactionReceiptModal = ({
     <Dialog defaultOpen onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Transaction Complete</DialogTitle>
+          <DialogTitle>Action Complete</DialogTitle>
         </DialogHeader>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <div className="text-sm font-medium">Transaction Hash</div>
-            <ExternalLink href={getTxHashExplorerLink(txReceipt.txHash)}>
-              {txReceipt.txHash.slice(0, 24)}...
+            <div className="text-sm font-medium">Hash</div>
+            <ExternalLink href={getTxHashExplorerLink(actionReceipt.txHash)}>
+              {actionReceipt.txHash.slice(0, 24)}...
             </ExternalLink>
           </div>
 
           <div className="flex items-center justify-between">
             <div className="text-sm font-medium">Block</div>
-            <ExternalLink href={getBlockExplorerLink(txReceipt.blockId)}>
-              {txReceipt.blockId.slice(0, 24)}...
+            <ExternalLink href={getBlockExplorerLink(actionReceipt.blockId)}>
+              {actionReceipt.blockId.slice(0, 24)}...
             </ExternalLink>
           </div>
         </div>
@@ -50,4 +50,4 @@ const TransactionReceiptModal = ({
   );
 };
 
-export default TransactionReceiptModal;
+export default ActionReceiptModal;

@@ -13,7 +13,7 @@ export function Header() {
         </Link>
         <div className="flex items-center gap-6">
           <Link
-            href="/action-history"
+            href="/action"
             className="text-gray-500 hover:text-primary transition-colors"
           >
             Action History
