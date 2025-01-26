@@ -36,7 +36,7 @@ export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
 
   submitData: async (
     data: string,
-    appId: number
+    appId?: number
   ): Promise<ISubmittableResult> => {
     try {
       const { availApi, signer, account } = get();
@@ -51,25 +51,39 @@ export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
 
       return new Promise((resolve, reject) => {
         const trx = availApi.tx.dataAvailability.submitData(data);
-        trx.signAndSend(
-          account.address,
-          {
-            signer,
-            app_id: appId,
-          } as Partial<SignerOptions>,
-          (result) => {
-            if (result.isError) {
-              reject(result);
-            }
-            // TODO: When transaction is part of a block, we can say 'Pending', but we need to wait for the block to be finalized. Can be handled when we add action tracking.
-            if (result.isFinalized) {
-              resolve(result);
-            }
+
+        const options = {
+          signer,
+          ...(appId ? { app_id: appId } : {}),
+        } as Partial<SignerOptions>;
+
+        trx.signAndSend(account.address, options, (result) => {
+          if (result.isError) {
+            reject(result);
           }
-        );
+          // TODO: When transaction is part of a block, we can say 'Pending', but we need to wait for the block to be finalized. Can be handled when we add action tracking.
+          if (result.isFinalized) {
+            resolve(result);
+          }
+        });
       });
     } catch (error) {
       console.error("Error in submitData", error);
+      throw error;
+    }
+  },
+
+  estimateFeeForSubmitData: async (data: string): Promise<bigint> => {
+    try {
+      const { availApi: _api, account: _account } = get();
+      const api = getValidatedParam<ApiPromise>(_api);
+      const account = getValidatedParam<WalletAccount>(_account);
+
+      const tx = api.tx.dataAvailability.submitData(data);
+      const paymentInfo = await tx.paymentInfo(account.address);
+      return paymentInfo.partialFee.toBigInt();
+    } catch (error) {
+      console.error("Error in estimateFeeForDataSubmission", error);
       throw error;
     }
   },
@@ -177,8 +191,6 @@ export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
       throw error;
     }
   },
-
-  // Fee estimation
 
   estimateFeeForTransfer: async (
     transferType: TransferType,

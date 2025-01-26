@@ -10,13 +10,24 @@ import {
   FormLabel,
   FormMessage,
 } from "@/modules/common/components/ui/form";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/modules/common/components/ui/tooltip";
+import { HelpCircle } from "lucide-react";
 import TransactionReceiptModal from "./TransactionReceiptModal";
+import ActionFeeEstimate from "./ActionFeeEstimate";
 
 const DataSubmission = () => {
   const {
     form,
     isSubmitting,
     isValid,
+    estimatedFee,
+    isEstimatingFee,
+    isBalanceSufficient,
     txReceipt,
     handleSubmit,
     clearTxReceipt,
@@ -31,28 +42,10 @@ const DataSubmission = () => {
       <div className="space-y-6">
         <FormField
           control={form.control}
-          name="appId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>App ID</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter application ID"
-                  {...field}
-                  disabled={isSubmitting}
-                />
-              </FormControl>
-              <FormMessage className="text-xs" />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="data"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Data</FormLabel>
+              <FormLabel>Data *</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Enter data to submit"
@@ -66,20 +59,56 @@ const DataSubmission = () => {
           )}
         />
 
-        <div className="rounded-lg border bg-muted/50 p-4">
-          <div className="text-sm font-medium">Estimated Fees</div>
-          <div className="mt-1 text-2xl font-bold">0.0 AVAIL</div>
-          <div className="mt-1 text-xs text-muted-foreground">
-            Final fee may vary based on network conditions
-          </div>
-        </div>
+        <FormField
+          control={form.control}
+          name="appId"
+          render={({ field }) => (
+            <FormItem>
+              <div className="flex items-center gap-2">
+                <FormLabel>App ID</FormLabel>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>
+                        App ID to which you want to submit data. Defaults to 0
+                        if not specified.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <FormControl>
+                <Input
+                  placeholder="Enter application ID"
+                  {...field}
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormMessage className="text-xs" />
+            </FormItem>
+          )}
+        />
+
+        <ActionFeeEstimate
+          isEstimatingFee={isEstimatingFee}
+          estimatedFee={estimatedFee}
+        />
 
         <Button
           className="w-full"
           onClick={handleSubmit}
-          disabled={isSubmitting || !isValid}
+          disabled={
+            isSubmitting || !isValid || isEstimatingFee || !isBalanceSufficient
+          }
         >
-          {isSubmitting ? "Submitting..." : "Submit Data"}
+          {!isBalanceSufficient
+            ? "Insufficient Balance"
+            : isSubmitting
+            ? "Submitting..."
+            : "Submit Data"}
         </Button>
       </div>
 

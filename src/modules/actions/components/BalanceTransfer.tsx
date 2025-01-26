@@ -1,5 +1,3 @@
-import { Loader2 } from "lucide-react";
-
 import { useBalanceTransfer } from "@/modules/actions/hooks/useBalanceTransfer";
 import { Button } from "@/modules/common/components/ui/button";
 import { Input } from "@/modules/common/components/ui/input";
@@ -14,6 +12,7 @@ import {
   FormMessage,
 } from "@/modules/common/components/ui/form";
 import TransactionReceiptModal from "@/modules/actions/components/TransactionReceiptModal";
+import ActionFeeEstimate from "./ActionFeeEstimate";
 
 const BalanceTransfer = () => {
   const {
@@ -88,35 +87,17 @@ const BalanceTransfer = () => {
           <Label>Keep account alive</Label>
         </div>
 
-        {(isEstimatingFee || estimatedFee) && (
-          <div className="rounded-lg border bg-muted/50 p-4">
-            <div className="text-sm font-medium">Estimated Fees</div>
-            <div className="mt-1 text-2xl font-bold">
-              {isEstimatingFee ? (
-                <div className="flex items-center gap-2">
-                  <Loader2 className="h-6 w-6 animate-spin" />
-                  <span>Estimating...</span>
-                </div>
-              ) : (
-                `${estimatedFee} AVAIL`
-              )}
-            </div>
-            <div className="mt-1 text-xs text-muted-foreground">
-              Final fee may vary based on network conditions
-            </div>
-          </div>
-        )}
+        <ActionFeeEstimate
+          isEstimatingFee={isEstimatingFee}
+          estimatedFee={estimatedFee}
+        />
 
         <Button
           className="w-full"
           onClick={handleSubmit}
           disabled={isSubmitting || !isValid || isEstimatingFee}
         >
-          {isSubmitting
-            ? "Transferring..."
-            : isEstimatingFee
-            ? "Estimating fees..."
-            : "Transfer"}
+          {isSubmitting ? "Transferring..." : "Transfer"}
         </Button>
       </div>
 

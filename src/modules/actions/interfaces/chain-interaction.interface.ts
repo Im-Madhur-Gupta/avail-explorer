@@ -11,7 +11,8 @@ export interface ChainInteractionState {
 }
 
 export interface ChainInteractionActions {
-  submitData: (data: string, appId: number) => Promise<ISubmittableResult>;
+  submitData: (data: string, appId?: number) => Promise<ISubmittableResult>;
+  estimateFeeForSubmitData: (data: string) => Promise<bigint>;
   transferKeepAlive: (
     recipient: string,
     amount: string
