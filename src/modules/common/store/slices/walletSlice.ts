@@ -169,9 +169,12 @@ export const createWalletSlice = (set: SetState, get: GetState) => ({
    */
   disconnect: async (): Promise<void> => {
     try {
+      const { clearTrackedActions, availApi } = get();
+
       set({ status: WalletStatus.DISCONNECTING });
 
-      const availApi = get().availApi;
+      clearTrackedActions();
+
       if (availApi) {
         await availApi.disconnect();
       }
