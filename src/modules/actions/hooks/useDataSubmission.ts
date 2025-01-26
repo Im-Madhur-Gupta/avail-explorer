@@ -26,10 +26,8 @@ export const useDataSubmission = () => {
   const {
     formattedEstimatedFee,
     isEstimatingFee,
-    actionReceipt,
     estimateFeeHandler,
     performActionHandler,
-    clearActionReceipt,
     clearEstimatedFee,
   } = useActionHandler();
 
@@ -79,10 +77,6 @@ export const useDataSubmission = () => {
       const parsedAppId = appId ? Number(appId) : undefined;
       await performActionHandler(() => submitData(data, parsedAppId));
 
-      toast({
-        title: "Data submitted successfully.",
-      });
-
       form.reset();
     } catch (error) {
       console.error("Data submission failed", error);
@@ -109,8 +103,6 @@ export const useDataSubmission = () => {
     estimatedFee: formattedEstimatedFee,
     isEstimatingFee,
     isBalanceSufficient,
-    actionReceipt,
     handleSubmit: form.handleSubmit(handleSubmit),
-    clearActionReceipt,
   };
 };

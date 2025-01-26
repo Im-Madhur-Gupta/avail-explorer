@@ -57,10 +57,10 @@ export const GET_USER_ACTIONS = `
  */
 export const GET_ACTION = `
   ${ACTION_FIELDS}
-  query GetAction($id: String!) {
+  query GetAction($txHash: String!) {
     extrinsics(
       first: 1,
-      filter: { id: { equalTo: $id } }
+      filter: { txHash: { equalTo: $txHash } }
     ) {
       edges {
         node {

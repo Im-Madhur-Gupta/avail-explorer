@@ -35,11 +35,11 @@ const deserializeActionData = (action: Action): Action => {
   };
 };
 
-export const useAction = (id: string) => {
+export const useAction = (txHash: string) => {
   const queryClient = useQueryClient();
 
   return useQuery<ActionResponse>({
-    queryKey: ["action", id],
+    queryKey: ["action", txHash],
     queryFn: async () => {
       try {
         // Check infinite query cache first
@@ -52,7 +52,7 @@ export const useAction = (id: string) => {
         const cachedAction = cachedQueries
           .flatMap(([, data]) => data?.pages ?? [])
           .flatMap((page) => page?.extrinsics.edges ?? [])
-          .find(({ node }) => node.id === id);
+          .find(({ node }) => node.txHash === txHash);
 
         if (cachedAction) {
           return {
@@ -64,12 +64,12 @@ export const useAction = (id: string) => {
 
         const response = await graphqlClient.request<ActionResponse>(
           GET_ACTION,
-          { id }
+          { txHash }
         );
 
         if (!response?.extrinsics?.edges?.[0]) {
-          console.error("Action not found in response:", { id, response });
-          throw new Error(`Action not found: ${id}`);
+          console.error("Action not found in response:", { txHash, response });
+          throw new Error(`Action not found: ${txHash}`);
         }
 
         // Deserialize before returning
@@ -80,12 +80,13 @@ export const useAction = (id: string) => {
           },
         };
       } catch (error) {
-        console.error("Failed to fetch action:", { id, error });
+        console.error("Failed to fetch action:", { txHash, error });
         throw error;
       }
     },
     staleTime: 1000 * 20,
     refetchInterval: 1000 * 10,
     gcTime: 1000 * 60 * 60,
+    retry: 5, // For recently confirmed transactions, allow time for the indexer to catch up. Retry up to 5 times to ensure accurate processing.
   });
 };

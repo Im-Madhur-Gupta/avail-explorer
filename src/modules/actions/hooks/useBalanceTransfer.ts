@@ -13,14 +13,12 @@ import { isValidSubstrateAddress } from "@/modules/actions/utils/address.utils";
 import { TransferType } from "@/modules/actions/enums/transfer-type.enum";
 import { EXISTENTIAL_BALANCE } from "@/modules/actions/constants/balance.constants";
 import { baseBalanceTransferSchema } from "@/modules/actions/schemas/balance-transfer.schema";
-import type { ActionReceipt } from "@/modules/actions/interfaces/action-receipt.interface";
 
 export const useBalanceTransfer = () => {
   const { toast } = useToast();
   const {
     balance,
     availApi,
-    updateBalance,
     estimateFeeForTransfer,
     transferKeepAlive,
     transferAllowDeath,
@@ -28,7 +26,6 @@ export const useBalanceTransfer = () => {
     useShallow((state) => ({
       balance: state.balance,
       availApi: state.availApi,
-      updateBalance: state.updateBalance,
       estimateFeeForTransfer: state.estimateFeeForTransfer,
       transferKeepAlive: state.transferKeepAlive,
       transferAllowDeath: state.transferAllowDeath,
@@ -38,9 +35,6 @@ export const useBalanceTransfer = () => {
   const [isKeepAlive, setIsKeepAlive] = useState(true);
   const [estimatedFee, setEstimatedFee] = useState<bigint | null>(null);
   const [isEstimatingFee, setIsEstimatingFee] = useState(false);
-  const [actionReceipt, setActionReceipt] = useState<ActionReceipt | null>(
-    null
-  );
 
   // Form validation
 
@@ -170,18 +164,8 @@ export const useBalanceTransfer = () => {
   ) => {
     try {
       const transferFn = isKeepAlive ? transferKeepAlive : transferAllowDeath;
-      const result = await transferFn(values.recipient, values.amount);
+      await transferFn(values.recipient, values.amount);
 
-      setActionReceipt({
-        blockId: result.status.asFinalized.toString(),
-        txHash: result.txHash.toString(),
-      });
-
-      toast({
-        title: "Transfer successful",
-      });
-
-      await updateBalance();
       form.reset();
       setEstimatedFee(null);
     } catch (error) {
@@ -192,10 +176,6 @@ export const useBalanceTransfer = () => {
         variant: "destructive",
       });
     }
-  };
-
-  const clearActionReceipt = () => {
-    setActionReceipt(null);
   };
 
   // Effects
@@ -233,8 +213,6 @@ export const useBalanceTransfer = () => {
     setIsKeepAlive,
     estimatedFee: formattedEstimatedFee,
     isEstimatingFee,
-    actionReceipt,
     handleSubmit: form.handleSubmit(handleSubmit),
-    clearActionReceipt,
   };
 };

@@ -16,6 +16,7 @@ import type {
 } from "@/modules/actions/interfaces/chain-interaction.interface";
 import type { WalletAccount } from "@/modules/common/interfaces/wallet.interface";
 import type { TransferParams } from "@/modules/actions/interfaces/transfer-params.interface";
+import { ActionType } from "../../enums/action-type.enum";
 
 export interface ChainInteractionSlice
   extends ChainInteractionState,
@@ -61,8 +62,11 @@ export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
           if (result.isError) {
             reject(result);
           }
-          // TODO: When action is part of a block, we can say 'Pending', but we need to wait for the block to be finalized. Can be handled when we add action tracking.
-          if (result.isFinalized) {
+
+          // Start tracking when we have the hash and resolve
+          if (result.status.isReady) {
+            const hash = result.txHash.toString();
+            get().trackAction(hash, ActionType.SUBMIT_DATA);
             resolve(result);
           }
         });
@@ -113,7 +117,11 @@ export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
               if (result.isError) {
                 reject(result);
               }
-              if (result.isFinalized) {
+
+              // Start tracking when we have the hash and resolve
+              if (result.status.isReady) {
+                const hash = result.txHash.toString();
+                get().trackAction(hash, ActionType.TRANSFER);
                 resolve(result);
               }
             }
@@ -148,7 +156,11 @@ export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
               if (result.isError) {
                 reject(result);
               }
-              if (result.isFinalized) {
+
+              // Start tracking when we have the hash and resolve
+              if (result.status.isReady) {
+                const hash = result.txHash.toString();
+                get().trackAction(hash, ActionType.TRANSFER);
                 resolve(result);
               }
             }
@@ -180,7 +192,11 @@ export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
               if (result.isError) {
                 reject(result);
               }
-              if (result.isFinalized) {
+
+              // Start tracking when we have the hash
+              if (result.status.isReady) {
+                const hash = result.txHash.toString();
+                get().trackAction(hash, ActionType.TRANSFER);
                 resolve(result);
               }
             }

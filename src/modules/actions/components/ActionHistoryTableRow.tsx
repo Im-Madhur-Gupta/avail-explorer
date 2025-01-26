@@ -13,13 +13,13 @@ interface ActionHistoryTableRowProps {
 }
 
 const ActionHistoryTableRow = ({ action }: ActionHistoryTableRowProps) => {
-  const { id, blockId, txHash, module, call, success, feesRounded, timestamp } =
+  const { blockId, txHash, module, call, success, feesRounded, timestamp } =
     action;
 
   const router = useRouter();
 
   const handleRowClick = () => {
-    router.push(`/action/${id}`);
+    router.push(`/action/${txHash}`);
   };
 
   return (

@@ -5,7 +5,6 @@ import type { ISubmittableResult } from "@polkadot/types/types";
 
 import { useAppStore } from "@/modules/common/providers/StoreProvider";
 import { formatAmount } from "@/modules/common/utils/amount.utils";
-import type { ActionReceipt } from "@/modules/actions/interfaces/action-receipt.interface";
 
 export const useActionHandler = () => {
   const { availApi } = useAppStore(
@@ -14,9 +13,6 @@ export const useActionHandler = () => {
     }))
   );
 
-  const [actionReceipt, setActionReceipt] = useState<ActionReceipt | null>(
-    null
-  );
   const [estimatedFee, setEstimatedFee] = useState<bigint | null>(null);
   const [isEstimatingFee, setIsEstimatingFee] = useState(false);
 
@@ -39,11 +35,7 @@ export const useActionHandler = () => {
     performAction: () => Promise<ISubmittableResult>
   ): Promise<void> => {
     try {
-      const result = await performAction();
-      const blockId = result.status.asFinalized.toString();
-      const txHash = result.txHash.toString();
-
-      setActionReceipt({ blockId, txHash });
+      await performAction();
       setEstimatedFee(null);
     } catch (error) {
       console.error("Action failed", error);
@@ -53,10 +45,6 @@ export const useActionHandler = () => {
 
   const clearEstimatedFee = () => {
     setEstimatedFee(null);
-  };
-
-  const clearActionReceipt = () => {
-    setActionReceipt(null);
   };
 
   const getFormattedAmount = (amount: bigint | null) => {
@@ -73,13 +61,10 @@ export const useActionHandler = () => {
   const formattedEstimatedFee = getFormattedAmount(estimatedFee);
 
   return {
-    actionReceipt,
-    estimatedFee,
     formattedEstimatedFee,
     isEstimatingFee,
     estimateFeeHandler,
     performActionHandler,
     clearEstimatedFee,
-    clearActionReceipt,
   };
 };

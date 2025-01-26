@@ -1,59 +1,35 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { useAppStore } from "@/modules/common/providers/StoreProvider";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
-import { useAction } from "@/modules/actions/hooks/useAction";
-import ActionDetailsPageLoader from "@/modules/actions/components/ActionDetailsPageLoader";
-import ActionDetailsError from "@/modules/actions/components/ActionDetailsError";
-import ActionDetailsContent from "../components/ActionDetailsContent";
+import { ActionStatus } from "@/modules/actions/enums/action-status.enum";
+import PendingActionDetails from "@/modules/actions/components/PendingActionDetails";
+import ConfirmedActionDetails from "@/modules/actions/components/ConfirmedActionDetails";
 
-interface ActionDetailsPageProps {
-  id: string;
-}
+const ActionDetailsPage = () => {
+  const { hash } = useParams<{ hash: string }>();
+  const actions = useAppStore((state) => state.trackedActions);
+  const action = actions[hash];
+  const [shouldFetch, setShouldFetch] = useState(false);
 
-const ActionDetailsPage = ({ id }: ActionDetailsPageProps) => {
-  const router = useRouter();
-  const { data, isLoading, isError } = useAction(id);
-
-  const node = data?.extrinsics.edges[0].node;
-
-  const renderContent = () => {
-    if (isLoading) {
-      return <ActionDetailsPageLoader />;
+  useEffect(() => {
+    // Only allow fetching from indexer if:
+    // 1. Action doesn't exist (old transaction)
+    // 2. Action exists but is finalized (indexer should have caught up)
+    if (!action || action.status === ActionStatus.SUCCESS) {
+      setShouldFetch(true);
     }
+  }, [action]);
 
-    if (isError || !node) {
-      return <ActionDetailsError />;
-    }
+  // If the action exists but hasn't been fetched yet, show pending action details
+  if (action && !shouldFetch) {
+    return <PendingActionDetails action={action} />;
+  }
 
-    return <ActionDetailsContent action={node} />;
-  };
-
-  return (
-    <div className="max-w-screen-2xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <button
-          onClick={() => router.back()}
-          className="flex items-center text-sm text-gray-500 hover:text-gray-700 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4 mr-1" />
-          Back
-        </button>
-      </div>
-
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          Action Details
-        </h1>
-        <p className="text-muted-foreground">
-          View detailed information about an action
-        </p>
-      </div>
-
-      {renderContent()}
-    </div>
-  );
+  // Otherwise, show confirmed action details
+  return <ConfirmedActionDetails hash={hash} />;
 };
 
 export default ActionDetailsPage;

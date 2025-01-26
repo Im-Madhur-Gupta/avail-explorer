@@ -8,8 +8,8 @@ import type {
   ToastProps,
 } from "@/modules/common/components/ui/toast";
 
-const TOAST_LIMIT = 1;
-const TOAST_REMOVE_DELAY = 1000000;
+const TOAST_LIMIT = 4;
+const TOAST_REMOVE_DELAY = 45_000;
 
 type ToasterToast = ToastProps & {
   id: string;
