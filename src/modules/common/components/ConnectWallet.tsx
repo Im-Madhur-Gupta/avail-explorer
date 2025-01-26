@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/modules/common/components/ui/dropdown-menu";
+import { getAddressExplorerLink } from "../utils/link.utils";
 
 const ConnectWallet = () => {
   const { status, account, connect, disconnect } = useAppStore(
@@ -59,13 +60,21 @@ const ConnectWallet = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
+          className="cursor-pointer"
           onClick={() => {
             navigator.clipboard.writeText(account.address);
           }}
         >
           Copy Address
         </DropdownMenuItem>
-        <DropdownMenuItem>View on Explorer</DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => {
+            window.open(getAddressExplorerLink(account.address), "_blank");
+          }}
+        >
+          View on Explorer
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={disconnect} className="text-destructive">
           Disconnect
