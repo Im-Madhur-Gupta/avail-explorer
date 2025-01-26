@@ -11,6 +11,7 @@ import {
 import { WalletStatus } from "@/modules/common/enums/wallet-status.enum";
 import { StoreState } from "../createStore";
 import { initialChainInteractionState } from "@/modules/actions/store/slices/chainInteractionSlice";
+import { toast } from "@/modules/common/hooks/use-toast";
 
 export interface WalletSlice extends WalletState, WalletActions {}
 
@@ -95,6 +96,11 @@ export const createWalletSlice = (set: SetState, get: GetState) => ({
       set({
         status: WalletStatus.DISCONNECTED,
       });
+      toast({
+        title: "Failed to connect wallet",
+        description: "There was an error connecting your wallet",
+        variant: "destructive",
+      });
     }
   },
 
@@ -177,6 +183,11 @@ export const createWalletSlice = (set: SetState, get: GetState) => ({
     } catch (error) {
       console.error("Failed to disconnect wallet", error);
       set({ status: WalletStatus.DISCONNECTED });
+      toast({
+        title: "Failed to disconnect wallet",
+        description: "There was an error disconnecting your wallet",
+        variant: "destructive",
+      });
     }
   },
 
@@ -195,6 +206,11 @@ export const createWalletSlice = (set: SetState, get: GetState) => ({
     } catch (error) {
       console.error("Failed to update balance", error);
       set({ balance: null });
+      toast({
+        title: "Failed to update balance",
+        description: "There was an error updating your wallet balance",
+        variant: "destructive",
+      });
     }
   },
 });
