@@ -18,6 +18,9 @@ export interface WalletSlice extends WalletState, WalletActions {}
 type SetState = StoreApi<StoreState>["setState"];
 type GetState = StoreApi<StoreState>["getState"];
 
+/**
+ * Initial state for wallet
+ */
 export const initialWalletState: WalletState = {
   status: WalletStatus.DISCONNECTED,
   account: null,
@@ -29,7 +32,8 @@ export const createWalletSlice = (set: SetState, get: GetState) => ({
   ...initialWalletState,
 
   /**
-   * Connects wallet and populates wallet state
+   * Connects wallet, initializes API and updates state
+   * @throws Error if no web3 provider or accounts found
    */
   connect: async (): Promise<void> => {
     try {
@@ -108,7 +112,8 @@ export const createWalletSlice = (set: SetState, get: GetState) => ({
    * Initializes wallet extension with Avail network metadata
    * @param extension - Extension identifier
    * @param availApi - Avail API instance
-   * @returns boolean indicating if initialization was performed
+   * @returns Boolean indicating if initialization was performed
+   * @throws Error if metadata initialization fails
    */
   initializeExtension: async (
     extension: string,
@@ -165,7 +170,7 @@ export const createWalletSlice = (set: SetState, get: GetState) => ({
   },
 
   /**
-   * Disconnects wallet and resets state
+   * Disconnects wallet, cleans up state and API connection
    */
   disconnect: async (): Promise<void> => {
     try {
@@ -194,6 +199,10 @@ export const createWalletSlice = (set: SetState, get: GetState) => ({
     }
   },
 
+  /**
+   * Updates wallet balance from chain state
+   * Sets balance to null if API or account unavailable
+   */
   updateBalance: async (): Promise<void> => {
     try {
       const { availApi, account } = get();

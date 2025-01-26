@@ -1,3 +1,6 @@
+/**
+ * Manages state and actions for tracking blockchain transactions
+ */
 import type { ApiPromise } from "avail-js-sdk";
 import type { StoreApi } from "zustand";
 import type { EventRecord } from "@polkadot/types/interfaces";
@@ -18,6 +21,9 @@ export interface ActionTrackingSlice
 type SetState = StoreApi<StoreState>["setState"];
 type GetState = StoreApi<StoreState>["getState"];
 
+/**
+ * Initial state for action tracking
+ */
 export const initialActionTrackingState: ActionTrackingState = {
   trackedActions: {},
 };
@@ -25,8 +31,9 @@ export const initialActionTrackingState: ActionTrackingState = {
 export const createActionTrackingSlice = (set: SetState, get: GetState) => ({
   ...initialActionTrackingState,
 
-  // Subscribe and process finalized blocks
-
+  /**
+   * Subscribes to finalized blocks and processes them for tracked actions
+   */
   subscribeFinalizedBlocks: async () => {
     try {
       console.log("Starting subscription for finalized blocks");
@@ -34,7 +41,9 @@ export const createActionTrackingSlice = (set: SetState, get: GetState) => ({
       const { availApi, processFinalizedBlock } = get();
 
       if (!availApi) {
-        console.warn("API not initialized. Cannot subscribe to finalized blocks.");
+        console.warn(
+          "API not initialized. Cannot subscribe to finalized blocks."
+        );
         return;
       }
 
@@ -49,6 +58,11 @@ export const createActionTrackingSlice = (set: SetState, get: GetState) => ({
     }
   },
 
+  /**
+   * Processes a finalized block to update status of tracked actions
+   * @param availApi - Avail API instance
+   * @param blockHash - Hash of the finalized block
+   */
   processFinalizedBlock: async (availApi: ApiPromise, blockHash: string) => {
     try {
       const block = await availApi.rpc.chain.getBlock(blockHash);
@@ -90,8 +104,11 @@ export const createActionTrackingSlice = (set: SetState, get: GetState) => ({
     }
   },
 
-  // Track actions
-
+  /**
+   * Tracks a new blockchain action
+   * @param hash - Transaction hash
+   * @param type - Type of action (data submission/transfer)
+   */
   trackAction: (hash: string, type: ActionType) => {
     try {
       console.log("trackAction", hash, type);
@@ -122,6 +139,11 @@ export const createActionTrackingSlice = (set: SetState, get: GetState) => ({
     }
   },
 
+  /**
+   * Updates status of a tracked action
+   * @param hash - Transaction hash
+   * @param status - New action status
+   */
   updateActionStatus: (hash: string, status: ActionStatus) => {
     set((state) => ({
       trackedActions: {
@@ -148,6 +170,9 @@ export const createActionTrackingSlice = (set: SetState, get: GetState) => ({
     }
   },
 
+  /**
+   * Clears all tracked actions from state
+   */
   clearTrackedActions: () => {
     set({ ...initialActionTrackingState });
   },

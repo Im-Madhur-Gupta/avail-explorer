@@ -10,6 +10,10 @@ import { hexToString } from "../utils/conversion.utils";
 import { formatAmount } from "@/modules/common/utils/amount.utils";
 import { TransferType } from "../enums/transfer-type.enum";
 
+/**
+ * Deserializes action data from hex format
+ * Handles special cases for data submission (hex to string) and transfers (formatting amounts with decimals)
+ */
 const deserializeActionData = (action: Action): Action => {
   return {
     ...action,
@@ -35,6 +39,12 @@ const deserializeActionData = (action: Action): Action => {
   };
 };
 
+/**
+ * Hook to fetch and monitor a specific onchain action
+ * Checks cache first, then fetches from indexer
+ * Includes automatic refetching to track action progress
+ * @param txHash - Transaction hash of the action
+ */
 export const useAction = (txHash: string) => {
   const queryClient = useQueryClient();
 

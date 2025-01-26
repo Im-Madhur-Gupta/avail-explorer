@@ -25,6 +25,9 @@ export interface ChainInteractionSlice
 type SetState = StoreApi<StoreState>["setState"];
 type GetState = StoreApi<StoreState>["getState"];
 
+/**
+ * Manages state and actions for blockchain interactions including data submission and transfers
+ */
 export const initialChainInteractionState: ChainInteractionState = {
   availApi: null,
   signer: null,
@@ -33,8 +36,12 @@ export const initialChainInteractionState: ChainInteractionState = {
 export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
   ...initialChainInteractionState,
 
-  // Data submission
-
+  /**
+   * Submits data to the blockchain
+   * @param data - Data to submit
+   * @param appId - Optional application ID
+   * @returns Promise resolving to submission result
+   */
   submitData: async (
     data: string,
     appId?: number
@@ -77,6 +84,11 @@ export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
     }
   },
 
+  /**
+   * Estimates fee for data submission
+   * @param data - Data to submit
+   * @returns Promise resolving to estimated fee in native tokens
+   */
   estimateFeeForSubmitData: async (data: string): Promise<bigint> => {
     try {
       const { availApi: _api, account: _account } = get();
@@ -92,8 +104,12 @@ export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
     }
   },
 
-  // Amount transfer
-
+  /**
+   * Transfers tokens while keeping minimum balance for account existence
+   * @param recipient - Recipient address
+   * @param amount - Amount to transfer
+   * @returns Promise resolving to transfer result
+   */
   transferKeepAlive: async (
     recipient: string,
     amount: string
@@ -133,6 +149,12 @@ export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
     }
   },
 
+  /**
+   * Transfers tokens allowing account to be deleted if emptied
+   * @param recipient - Recipient address
+   * @param amount - Amount to transfer
+   * @returns Promise resolving to transfer result
+   */
   transferAllowDeath: async (
     recipient: string,
     amount: string
@@ -172,6 +194,12 @@ export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
     }
   },
 
+  /**
+   * Transfers all tokens from account
+   * @param recipient - Recipient address
+   * @param keepAlive - Whether to keep minimum balance for account existence
+   * @returns Promise resolving to transfer result
+   */
   transferAll: async (
     recipient: string,
     keepAlive: boolean
@@ -208,6 +236,12 @@ export const createChainInteractionSlice = (set: SetState, get: GetState) => ({
     }
   },
 
+  /**
+   * Estimates fee for token transfer
+   * @param transferType - Type of transfer (KeepAlive/AllowDeath/All)
+   * @param params - Transfer parameters
+   * @returns Promise resolving to estimated fee in native tokens
+   */
   estimateFeeForTransfer: async (
     transferType: TransferType,
     params: TransferParams
