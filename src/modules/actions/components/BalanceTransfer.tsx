@@ -63,7 +63,7 @@ const BalanceTransfer = () => {
                     {...field}
                   />
                   {/* TODO: Implement max button logic */}
-                  <Button variant="outline">Max</Button>
+                  {/* <Button variant="outline">Max</Button> */}
                 </div>
               </FormControl>
               <FormMessage className="text-xs" />
