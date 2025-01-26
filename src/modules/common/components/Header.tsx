@@ -23,7 +23,7 @@ export function Header() {
     <header className="border-b">
       <div className="container mx-auto py-4 flex justify-between items-center">
         <Link href="/">
-          <h1>AvailX</h1>
+          <h1>Avail Explorer</h1>
         </Link>
         <div className="flex items-center gap-6">
           <Link

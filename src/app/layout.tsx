@@ -13,7 +13,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "AvailX",
+  title: "Avail Explorer",
   description: "A simple explorer for Avail",
 };
 

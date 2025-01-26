@@ -40,7 +40,7 @@ export const createStore = (
         ...createActionTrackingSlice(set, get),
       }),
       {
-        name: "avail-x-store",
+        name: "avail-explorer-store",
         storage: createJSONStorage(() => localStorage),
         partialize: (state) => ({
           account: state.account,
