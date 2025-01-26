@@ -38,8 +38,8 @@ export const useUserActions = ({
         ? lastPage.extrinsics.pageInfo.endCursor
         : undefined,
     staleTime: 1000 * 20, // 20 seconds
-    refetchInterval: 1000 * 10, // 10 seconds
-    gcTime: 1000 * 60 * 60, // 1 hour
+    refetchInterval: 1000 * 20, // 20 seconds
+    gcTime: 1000 * 60 * 30, // 30 minutes
     enabled,
   });
 };

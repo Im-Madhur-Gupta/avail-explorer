@@ -84,9 +84,9 @@ export const useAction = (txHash: string) => {
         throw error;
       }
     },
-    staleTime: 1000 * 20,
-    refetchInterval: 1000 * 10,
-    gcTime: 1000 * 60 * 60,
-    retry: 5, // For recently confirmed transactions, allow time for the indexer to catch up. Retry up to 5 times to ensure accurate processing.
+    staleTime: 1000 * 20, // 20 seconds
+    refetchInterval: 1000 * 20, // 20 seconds
+    gcTime: 1000 * 60 * 5, // 5 minutes
+    retry: 5, // 5 retries to ensure accurate processing in case indexer takes time to catch up
   });
 };
