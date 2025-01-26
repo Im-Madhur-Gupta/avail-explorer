@@ -16,7 +16,7 @@ import type {
 } from "@/modules/actions/interfaces/chain-interaction.interface";
 import type { WalletAccount } from "@/modules/common/interfaces/wallet.interface";
 import type { TransferParams } from "@/modules/actions/interfaces/transfer-params.interface";
-import { ActionType } from "../../enums/action-type.enum";
+import { ActionType } from "../enums/action-type.enum";
 
 export interface ChainInteractionSlice
   extends ChainInteractionState,

@@ -9,8 +9,8 @@ import {
   InjectedWeb3Entry,
 } from "@/modules/common/interfaces/wallet.interface";
 import { WalletStatus } from "@/modules/common/enums/wallet-status.enum";
-import { StoreState } from "../createStore";
-import { initialChainInteractionState } from "@/modules/actions/store/slices/chainInteractionSlice";
+import { StoreState } from "./createStore";
+import { initialChainInteractionState } from "@/modules/actions/store/chainInteractionSlice";
 import { toast } from "@/modules/common/hooks/use-toast";
 
 export interface WalletSlice extends WalletState, WalletActions {}

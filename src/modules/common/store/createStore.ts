@@ -5,17 +5,17 @@ import {
   WalletSlice,
   createWalletSlice,
   initialWalletState,
-} from "../store/slices/walletSlice";
+} from "./walletSlice";
 import {
   createChainInteractionSlice,
   initialChainInteractionState,
   type ChainInteractionSlice,
-} from "@/modules/actions/store/slices/chainInteractionSlice";
+} from "@/modules/actions/store/chainInteractionSlice";
 import {
   ActionTrackingSlice,
   createActionTrackingSlice,
   initialActionTrackingState,
-} from "@/modules/actions/store/slices/actionTrackingSlice";
+} from "@/modules/actions/store/actionTrackingSlice";
 
 // Combine all slices here
 export type StoreState = WalletSlice &
