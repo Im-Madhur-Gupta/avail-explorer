@@ -5,6 +5,7 @@ import { StoreProvider } from "@/modules/common/providers/StoreProvider";
 import { QueryProvider } from "@/modules/common/providers/QueryProvider";
 import { Header } from "@/modules/common/components/Header";
 import { Toaster } from "@/modules/common/components/ui/toaster";
+import Status from "@/modules/common/components/Status";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -27,7 +28,8 @@ export default function RootLayout({
         <QueryProvider>
           <StoreProvider>
             <Header />
-            <main className="container mx-auto py-6 space-y-8">{children}</main>
+            <main className="container mx-auto py-8">{children}</main>
+            <Status />
             <Toaster />
           </StoreProvider>
         </QueryProvider>
