@@ -3,6 +3,7 @@ import { ActionsResponse } from "../interfaces/action.interface";
 import EmptyActionHistory from "./EmptyActionHistory";
 import ActionHistoryTableHeader from "./ActionHistoryTableHeader";
 import ActionHistoryTableRow from "./ActionHistoryTableRow";
+import { Table, TableBody } from "@/modules/common/components/ui/table";
 
 export interface ActionHistoryTableProps {
   data: InfiniteData<ActionsResponse, unknown> | undefined;
@@ -14,17 +15,17 @@ const ActionHistoryTable = ({ data }: ActionHistoryTableProps) => {
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200">
-      <table className="min-w-full bg-white">
+    <div className="rounded-lg border border-gray-200">
+      <Table>
         <ActionHistoryTableHeader />
-        <tbody className="divide-y divide-gray-200">
+        <TableBody>
           {data?.pages.map((page) =>
             page.extrinsics.edges.map(({ node }) => (
               <ActionHistoryTableRow key={node.id} action={node} />
             ))
           )}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 };

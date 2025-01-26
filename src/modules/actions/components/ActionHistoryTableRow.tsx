@@ -7,6 +7,7 @@ import {
   getTxHashExplorerLink,
 } from "@/modules/common/utils/link.utils";
 import type { Action } from "@/modules/actions/interfaces/action.interface";
+import { TableCell, TableRow } from "@/modules/common/components/ui/table";
 
 interface ActionHistoryTableRowProps {
   action: Action;
@@ -23,29 +24,29 @@ const ActionHistoryTableRow = ({ action }: ActionHistoryTableRowProps) => {
   };
 
   return (
-    <tr onClick={handleRowClick} className="hover:bg-gray-50 cursor-pointer">
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+    <TableRow onClick={handleRowClick} className="cursor-pointer">
+      <TableCell className="text-sm text-gray-500">
         {formatDistanceToNow(new Date(timestamp + "Z"), {
           addSuffix: true,
         })}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      </TableCell>
+      <TableCell className="text-sm text-gray-500">
         <ExternalLink href={getBlockExplorerLink(blockId)}>
           {blockId}
         </ExternalLink>
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      </TableCell>
+      <TableCell className="text-sm text-gray-500">
         <ExternalLink href={getTxHashExplorerLink(txHash)}>
           {txHash.slice(0, 12)}...
         </ExternalLink>
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+      </TableCell>
+      <TableCell className="text-sm font-medium text-gray-900">
         {module}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+      </TableCell>
+      <TableCell className="text-sm font-medium text-gray-900">
         {call}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
+      </TableCell>
+      <TableCell>
         <span
           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
             success ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
@@ -53,11 +54,11 @@ const ActionHistoryTableRow = ({ action }: ActionHistoryTableRowProps) => {
         >
           {success ? "Success" : "Failed"}
         </span>
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      </TableCell>
+      <TableCell className="text-sm text-gray-500">
         {`${feesRounded} AVAIL`}
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 };
 
